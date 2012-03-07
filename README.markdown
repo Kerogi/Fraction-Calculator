@@ -9,15 +9,10 @@ Task description
 The task is to implement a fraction calculator API such that the following can be achieved by a client using the API:
 
 1.	All fractions are represented in the form of Numerator and Denominator, including results.
-
 2.	Addition
-
 3.	Subtraction
-
 4.	Multiplication
-
 5.	Division
-
 6.	It is expected to throw correct exceptions.
 
 
