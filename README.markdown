@@ -1,4 +1,4 @@
-Fraction Calculator
+﻿Fraction Calculator
 ===================
 
 Simple fraction calculator that I should write on C# for my education. 
