@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fraction-Calculator", "Fraction-Calculator\Fraction-Calculator.csproj", "{974D1736-E3E0-418B-897E-8D9E1510A059}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fraction-Calculator.Test", "Fraction-Calculator.Test\Fraction-Calculator.Test.csproj", "{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3B566182-C6E3-4958-8665-44756F668B62}"
+	ProjectSection(SolutionItems) = preProject
+		Fraction-Calculator.vsmdi = Fraction-Calculator.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Fraction-Calculator.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Debug|x86.ActiveCfg = Debug|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Debug|x86.Build.0 = Debug|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Release|Any CPU.ActiveCfg = Release|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Release|Mixed Platforms.Build.0 = Release|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Release|x86.ActiveCfg = Release|x86
+		{974D1736-E3E0-418B-897E-8D9E1510A059}.Release|x86.Build.0 = Release|x86
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A6EECBB8-5DEF-4611-8C9E-4A74EB08D85E}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
