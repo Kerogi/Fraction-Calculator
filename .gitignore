@@ -12,3 +12,4 @@ bin
 [Tt]humbs.db 
 _ReSharper.*
 *.resharper
+TestResults
