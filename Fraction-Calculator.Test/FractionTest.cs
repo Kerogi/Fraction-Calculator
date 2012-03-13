@@ -89,5 +89,20 @@ namespace Fraction_Calculator.Test
 			Assert.AreEqual(expected, actual);
 	 
 		}
+
+        [TestMethod]
+        public void AddFractionsTest()
+        {
+            //Arrange
+            Fraction a = new Fraction(1, 2);
+            Fraction b = new Fraction(3, 5);
+            Fraction expected = new Fraction(11, 10);
+
+            //Act 
+            var actual = a + b;
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
 	}
 }

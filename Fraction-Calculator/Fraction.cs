@@ -84,11 +84,14 @@ namespace FractionMath
 		//TODO: write basic operators: +, -, /, *
 		//TODO: implement IFormattable interface
 
-		/*
-		public static Complex operator +(Complex c1, Complex c2)
-		{
-			return new Complex(c1.real + c2.real, c1.imaginary + c2.imaginary);
-		}
-		*/
-	}
+
+        public static Fraction operator +(Fraction a, Fraction b)
+        {
+            uint comon = Utils.LeastCommonMultiple(a.Denominator, b.Denominator);
+            uint coofA = comon/a.Denominator;
+            uint coofB = comon/b.Denominator;
+            return new Fraction(a.Numerator * coofA + b.Numerator * coofB, a.Denominator * coofA);
+        }
+        
+    }
 }
