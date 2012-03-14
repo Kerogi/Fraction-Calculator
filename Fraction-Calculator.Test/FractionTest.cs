@@ -1,5 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FractionMath;
+using System;
+using Moq;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace Fraction_Calculator.Test
 {
@@ -8,7 +12,7 @@ namespace Fraction_Calculator.Test
 	{
 		//TODO: write some exceptions test
 		[TestMethod]
-		public void ConstructionTest()
+		public void ConstructionUintUintBoolTest()
 		{
 			//Arrange
 			uint numerator = 5;
@@ -21,6 +25,23 @@ namespace Fraction_Calculator.Test
 			//Assert
 			Assert.AreEqual<uint>(5, fract.Numerator);
 			Assert.AreEqual<uint>(9, fract.Denominator);
+			Assert.AreEqual<bool>(true, fract.IsNegative);
+		}
+
+		[TestMethod]
+		public void ConstructionLongLongTest()
+		{
+			//Arrange
+			long numerator = -1;
+			long denominatior = 2;
+			
+
+			//Act
+			var fract = new Fraction(numerator, denominatior);
+
+			//Assert
+			Assert.AreEqual<uint>(1, fract.Numerator);
+			Assert.AreEqual<uint>(2, fract.Denominator);
 			Assert.AreEqual<bool>(true, fract.IsNegative);
 		}
 
@@ -57,7 +78,7 @@ namespace Fraction_Calculator.Test
 		}
 
 		[TestMethod]
-		public void CopyFractionTest()
+		public void CloneFractionTest()
 		{
 			//Arrange
 			uint numerator = 123;
@@ -66,7 +87,7 @@ namespace Fraction_Calculator.Test
 			Fraction expectedFraction = new Fraction(numerator, denominatior);
 
 			//Act 
-			var dstFraction = srcFraction.Copy();
+            Fraction dstFraction = srcFraction.Clone() as Fraction;
 
 			//Assert
 			Assert.AreEqual(expectedFraction.Numerator, dstFraction.Numerator);
@@ -75,34 +96,140 @@ namespace Fraction_Calculator.Test
 		}
 
 		[TestMethod]
-		public void CompareFractionsTest()
+		public void IComparableTest()
 		{
 			//Arrange
-			Fraction smallerFraction = new Fraction(2, 5);
-			Fraction biggerFraction = new Fraction(1, 2);
+			Fraction smaller= new Fraction(2, 5);
+			Fraction bigger = new Fraction(1, 2);
 			int expected = 1;
 
 			//Act 
-			var actual = biggerFraction.CompareTo(smallerFraction);
+			var actual = ((IComparable<Fraction>)bigger).CompareTo(smaller);
 
 			//Assert
 			Assert.AreEqual(expected, actual);
 	 
 		}
 
+		[TestMethod]
+		public void IEquatableTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(6, 8);
+			Fraction b = new Fraction(3, 4);
+			bool expected = true;
+
+			//Act 
+			var actual = ((IEquatable<Fraction>)b).Equals(b);
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+
+		#region Mathematical Operators Test
         [TestMethod]
-        public void AddFractionsTest()
+        public void MathNegationTest()
         {
             //Arrange
             Fraction a = new Fraction(1, 2);
-            Fraction b = new Fraction(3, 5);
-            Fraction expected = new Fraction(11, 10);
+            Fraction expected = new Fraction(1, 2, true);
 
             //Act 
-            var actual = a + b;
+            Fraction actual = -a;
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, -a);
         }
+
+		[TestMethod]
+		public void OperatorAdditionTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(1, 2);
+			Fraction b = new Fraction(1, 3);
+			Fraction expected = new Fraction(5, 6);
+
+			//Act 
+			Fraction actual = a + b;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void OperatorSubtractionTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(-1, 2);
+			Fraction b = new Fraction(1, 4);
+			Fraction expected = new Fraction(-3, 4);
+
+			//Act
+			Fraction actual = (a - b);
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void SortArraysOfFractions()
+		{
+			//Arrange
+            var numberOfSamples = 5;
+            Random rand = new Random();
+
+            Fraction[] fractions = new Fraction[numberOfSamples];
+            uint[] values = new uint[numberOfSamples];
+  
+            for(int i = 0; i<numberOfSamples; i++)
+            {
+                fractions[i].Denominator = Convert.ToUInt32(rand.Next(2, 100));          
+                values[i] = fractions[i].Denominator;
+            }
+
+
+            var comparerMock = new Mock< IComparer >();
+			comparerMock.Setup(foo => foo.Compare(It.IsAny<uint>(), It.IsAny<Fraction>())).Returns((uint a, Fraction b) => (a.CompareTo(b.Denominator)));
+
+
+			//Act
+            Array.Sort(fractions);
+            Array.Sort(values);
+
+			//Assert
+            CollectionAssert.AreEqual(values, fractions, comparerMock.Object);
+		}		
+        
+        [TestMethod]
+		public void OperatorMultiplyTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(1, 2);
+			Fraction b = new Fraction(3, 4);
+			Fraction expected = new Fraction(3, 8);
+
+			//Act
+			Fraction actual = (a * b);
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void OperatorDivisionTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(1, 2);
+			Fraction b = new Fraction(1, 3);
+			Fraction expected = new Fraction(3, 2);
+
+			//Act
+			Fraction actual = a / b;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		} 
+		#endregion
 	}
 }
