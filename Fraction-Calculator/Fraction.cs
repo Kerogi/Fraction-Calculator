@@ -13,7 +13,7 @@ namespace FractionMath
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private uint _denominator = 1;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private bool _negative = false; 
+        private bool _negative = false;
         #endregion
 
         #region Properties
@@ -60,6 +60,20 @@ namespace FractionMath
             : this(Convert.ToUInt32(Math.Abs(numerator)), Convert.ToUInt32(Math.Abs(denominator)), numerator < 0) 
         {
            
+        }
+
+        public Fraction(long number)
+            : this(Convert.ToUInt32(Math.Abs(number)), 1, number < 0)
+        {
+
+        }
+
+        public Fraction(decimal number)
+        {
+        }
+
+        public Fraction(double number)
+        {
         } 
         #endregion
 
@@ -93,16 +107,23 @@ namespace FractionMath
 		//TODO: implement IFormattable interface
 
         #region Equality operations
+        public override int GetHashCode()
+        {
+            return (int)(Numerator ^ Denominator) * (IsNegative?-1:1);
+        }
+
         public override bool Equals(Object other)
         {
-            if (other != null && other is Fraction) return this.Equals(other as Fraction);
-            return false;
+            if (other == null) return false;
+            if (!(other is Fraction)) return false;
+            return this.Equals(other as Fraction);
         }
 
         public bool Equals(Fraction other)
         {
-            if (other == null) return false;
+            if ((Object)other == null) return false;
             if (IsNegative != other.IsNegative) return false;
+            if (Numerator == other.Numerator && Denominator == other.Denominator) return true;
             uint lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
             return (Numerator * (lcm / Denominator)) == (other.Numerator * (lcm / other.Denominator));
         }
@@ -127,8 +148,8 @@ namespace FractionMath
             }
             else
             {
-                double valueThis = Numerator / (double)Denominator;
-                double valueOther = other.Numerator / (double)other.Denominator;
+                double valueThis = Numerator / (double)Denominator * (IsNegative ? -1 : 1);
+                double valueOther = other.Numerator / (double)other.Denominator * (other.IsNegative ? -1 : 1);
                 if (valueThis > valueOther)
                     return 1;
                 else
@@ -176,12 +197,18 @@ namespace FractionMath
 
         public static Fraction operator *(Fraction left, Fraction right)
         {
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+
             return new Fraction(left.Numerator * right.Numerator, left.Denominator * right.Denominator);
         }
 
         public static Fraction operator /(Fraction left, Fraction right)
         {
-            return new Fraction(left.Numerator * right.Denominator, left.Denominator * right.Denominator);
+            if (left == null) throw new ArgumentNullException("left");
+            if (right == null) throw new ArgumentNullException("right");
+
+            return new Fraction(left.Numerator * right.Denominator, left.Denominator * right.Numerator);
         } 
         #endregion
 

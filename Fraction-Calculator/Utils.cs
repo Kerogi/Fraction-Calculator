@@ -27,5 +27,26 @@ namespace FractionMath
 		{
 			return (uint) Math.Abs(a * b) / GreatestCommonDivisor(a, b);
 		}
+
+        public static int GetFractionalDigits(Decimal number)
+        {
+            return (Decimal.GetBits(number)[3] >> 16) & 0x7fff;
+        }
+
+        public static int GetFractionalDigits(double number)
+        {
+            double denominator = 1;
+            int numbersAfterDot = 0;
+            for (numbersAfterDot = 0; numbersAfterDot < 29; numbersAfterDot++)
+            {
+                double remainder = number % denominator;
+                if (remainder <= 0)
+                {
+                   break;
+                }
+                denominator *= 10.0; // power in i ==> deniminator^i
+            }
+            return numbersAfterDot;
+        }
 	}
 }
