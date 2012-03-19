@@ -7,7 +7,7 @@ namespace FractionMath
 {
 	public class Utils
 	{
-		static public uint GreatestCommonDivisor(uint a, uint b)
+		static public ulong GreatestCommonDivisor(ulong a, ulong b)
 		{
 			while (a != 0 && b != 0)
 			{
@@ -23,9 +23,9 @@ namespace FractionMath
 				return a;
 		}
 
-		static public uint LeastCommonMultiple(uint a, uint b)
+		static public ulong LeastCommonMultiple(ulong a, ulong b)
 		{
-			return (uint) Math.Abs(a * b) / GreatestCommonDivisor(a, b);
+			return (ulong) Math.Abs((decimal)a * b) / GreatestCommonDivisor(a, b);
 		}
 
 		public static int GetFractionalDigits(Decimal number)

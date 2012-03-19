@@ -52,7 +52,7 @@ namespace Fraction_Calculator.Test
 			double digitsAfterDot_1 = 32425345.6;
 			double digitsAfterDot_2 = -29371.24;
 			double digitsAfterDot_3 = 801.234;
-			double digitsAfterDot_4 = 2.00001;
+			double digitsAfterDot_4 = 2.0001;
 			double digitsAfterDot_5 = 0.21745;
 
 

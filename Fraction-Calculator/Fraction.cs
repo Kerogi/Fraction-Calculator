@@ -5,25 +5,32 @@ namespace FractionMath
 {
 	//TODO: Move format logic to Format or to ToString
 	[DebuggerDisplay("{ToString(),nq} ({(double)Numerator/Denominator})")]
-	public class Fraction: IComparable<Fraction>, IEquatable<Fraction>, ICloneable, IConvertible, ICustomFormatter, IFormattable
+	public class Fraction: IComparable<Fraction>, IEquatable<Fraction>, ICloneable, IConvertible
 	{
 		#region Private fields
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private uint _numerator = 1;
+		private ulong _numerator = 1;
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private uint _denominator = 1;
+		private ulong _denominator = 1;
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private bool _negative = false;
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		private static char[] _vinculums = { '/', '|', '\\' };
 		#endregion
 
 		#region Properties
-		public uint Numerator
+		public static char[] Vinculums 
+		{
+			get { return _vinculums; }
+		}
+
+		public ulong Numerator
 		{
 			get { return _numerator; }
 			set { _numerator = value; }
 		}
 
-		public uint Denominator
+		public ulong Denominator
 		{
 			get { return _denominator; }
 			set
@@ -44,7 +51,7 @@ namespace FractionMath
 		#endregion
 
 		#region Constructors (explicit)
-		public Fraction(uint numerator, uint denominator, bool isNegative = false)
+		public Fraction(ulong numerator, ulong denominator, bool isNegative = false)
 		{
 			if (denominator == 0)
 			{
@@ -57,16 +64,42 @@ namespace FractionMath
 		}
 
 		public Fraction(long numerator, long denominator)
-			: this(Convert.ToUInt32(Math.Abs(numerator)), Convert.ToUInt32(Math.Abs(denominator)), numerator < 0) 
+			: this(Convert.ToUInt64(Math.Abs(numerator)), Convert.ToUInt64(Math.Abs(denominator)), numerator < 0) 
 		{
 		   
 		}
 
-		public Fraction(long number)
-			: this(Convert.ToUInt32(Math.Abs(number)), 1, number < 0)
-		{
+		public Fraction(sbyte value)
+			: this(Convert.ToUInt64(Math.Abs(value)), 1, value < 0)
+		{}
 
-		}
+		public Fraction(short value)
+			: this(Convert.ToUInt64(Math.Abs(value)), 1, value < 0)
+		{}
+
+		public Fraction(int value)
+			: this(Convert.ToUInt64(Math.Abs(value)), 1, value < 0)
+		{}
+
+		public Fraction(long value)
+			: this(Convert.ToUInt64(Math.Abs(value)), 1, value < 0)
+		{}
+
+		public Fraction(byte value)
+			: this(Convert.ToUInt64(value), 1)
+		{}
+
+		public Fraction(ushort value)
+			: this(Convert.ToUInt64(value), 1)
+		{}
+
+		public Fraction(uint value)
+			: this(Convert.ToUInt64(value), 1)
+		{}
+
+		public Fraction(ulong value)
+			: this(value, 1)
+		{}
 
 		public Fraction(decimal number)
 		{
@@ -77,27 +110,102 @@ namespace FractionMath
 				den = Decimal.Multiply(den, 10M);
 			}
 			decimal num = Decimal.Multiply(number, den);
-            Debug.Assert(Utils.GetFractionalDigits(num) <= 0);
+			if (Math.Abs(num) >= Convert.ToDecimal(UInt64.MaxValue))
+			{
+				string desc = String.Format("value \'{0}\' cannot be precisely converted to fraction.", number);
+				throw new ArgumentException(desc);
+			}
 
-			Numerator = Convert.ToUInt32(Math.Abs(num));
-            Denominator = Convert.ToUInt32(Math.Abs(den));
-            IsNegative = (number < 0);
-            Reduce();
+			Debug.Assert(Decimal.Subtract(num, Decimal.Truncate(num)) == 0);
+			
+
+			Numerator = Convert.ToUInt64(Math.Abs(num));
+			Denominator = Convert.ToUInt64(Math.Abs(den));
+			IsNegative = (number < 0);
+			Reduce();
 		}
 
 		public Fraction(double number)
-            :this(Convert.ToDecimal(number))
+			:this(Convert.ToDecimal(number))
 		{}
 
-        public Fraction(String str)
-            : this(Convert.ToDecimal(str))
-        { } 
+		public Fraction(float number)
+			: this(Convert.ToDecimal(number))
+		{}
+
+		public Fraction(String str)//Simple 
+			: this(Convert.ToDecimal(str))
+		{} 
+
+		#endregion
+
+		#region Constructors (implicit)
+
+		public static implicit operator Fraction(Decimal value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(double value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(float value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(byte value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(sbyte value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(short value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(int value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(long value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(ushort value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(ulong value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(uint value)
+		{
+			return new Fraction(value);
+		}
+
+		public static implicit operator Fraction(string value)
+		{
+			return Fraction.Parse(value);
+		}
 
 		#endregion
 
 		public void Reduce()
 		{
-			uint divisor = Utils.GreatestCommonDivisor(Numerator, Denominator);
+			ulong divisor = Utils.GreatestCommonDivisor(Numerator, Denominator);
 			Numerator /= divisor;
 			Denominator /= divisor;
 		}
@@ -108,6 +216,43 @@ namespace FractionMath
 			var fractionReduced = fraction.Clone() as Fraction;
 			fractionReduced.Reduce();
 			return fractionReduced;
+		}
+
+		public static Fraction Parse(string stringValue)
+		{
+			if (stringValue.IndexOfAny(Fraction.Vinculums) != -1)
+			{
+				string[] fractionSubparts = stringValue.Split(Fraction.Vinculums);
+				if(fractionSubparts.Length>=2)
+				{
+					long numerator, denominator;
+					if (long.TryParse(fractionSubparts[0], out numerator) && long.TryParse(fractionSubparts[1], out denominator))
+					{
+						return new Fraction(numerator, denominator);
+					}
+					else
+					{
+						throw new FormatException(String.Format("Cannot parse \'{0}\' value", stringValue));
+					}
+				}
+				else 
+				{
+					throw new FormatException(String.Format("Cannot parse \'{0}\' value", stringValue));
+				}
+			}
+			else
+			{
+				decimal simpleDecimalValue;
+				if (Decimal.TryParse(stringValue, out simpleDecimalValue))
+				{
+					return new Fraction(simpleDecimalValue);
+				}
+				else 
+				{
+					throw new FormatException(String.Format("Cannot parse \'{0}\' value", stringValue));
+				}
+
+			}
 		}
 
 		public object Clone()
@@ -142,7 +287,7 @@ namespace FractionMath
 			if ((Object)other == null) return false;
 			if (IsNegative != other.IsNegative) return false;
 			if (Numerator == other.Numerator && Denominator == other.Denominator) return true;
-			uint lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
+			ulong lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
 			return (Numerator * (lcm / Denominator)) == (other.Numerator * (lcm / other.Denominator));
 		}
 
@@ -200,8 +345,11 @@ namespace FractionMath
 			if (left == null) throw new ArgumentNullException("left");
 			if (right == null) throw new ArgumentNullException("right");
 
-			int lcm = (int)Utils.LeastCommonMultiple(left.Denominator, right.Denominator);
-			return new Fraction(left.Numerator * (lcm / left.Denominator) * (left.IsNegative ? -1 : 1) + right.Numerator * (lcm / right.Denominator) * (right.IsNegative ? -1 : 1), lcm);
+			decimal lcm = Convert.ToDecimal(Utils.LeastCommonMultiple(left.Denominator, right.Denominator));
+			decimal leftNumerator = Convert.ToDecimal(left.Numerator * (lcm / left.Denominator)) * (left.IsNegative ? -1 : 1);
+			decimal rightNumerator= Convert.ToDecimal(right.Numerator * (lcm / right.Denominator)) * (right.IsNegative ? -1 : 1);
+			long resultNumerator = Convert.ToInt64(leftNumerator + rightNumerator);
+			return new Fraction(resultNumerator, Convert.ToInt64(Math.Abs(lcm)));
 		}
 
 		public static Fraction operator -(Fraction left, Fraction right)
@@ -209,8 +357,7 @@ namespace FractionMath
 			if (left == null) throw new ArgumentNullException("left");
 			if (right == null) throw new ArgumentNullException("right");
 
-			int lcm = (int)Utils.LeastCommonMultiple(left.Denominator, right.Denominator);
-			return new Fraction(left.Numerator * (lcm / left.Denominator) * (left.IsNegative ? -1 : 1) - right.Numerator * (lcm / right.Denominator) * (right.IsNegative ? -1 : 1), lcm);
+			return (left + (-right));
 		}
 
 		public static Fraction operator *(Fraction left, Fraction right)
@@ -218,7 +365,9 @@ namespace FractionMath
 			if (left == null) throw new ArgumentNullException("left");
 			if (right == null) throw new ArgumentNullException("right");
 
-			return new Fraction(left.Numerator * right.Numerator, left.Denominator * right.Denominator);
+			int sign = (left.IsNegative ? -1 : 1) * (right.IsNegative ? -1 : 1);
+
+			return new Fraction(left.Numerator * right.Numerator, left.Denominator * right.Denominator, sign < 0);
 		}
 
 		public static Fraction operator /(Fraction left, Fraction right)
@@ -226,69 +375,70 @@ namespace FractionMath
 			if (left == null) throw new ArgumentNullException("left");
 			if (right == null) throw new ArgumentNullException("right");
 
-			return new Fraction(left.Numerator * right.Denominator, left.Denominator * right.Numerator);
+			int sign = (left.IsNegative ? -1 : 1) * (right.IsNegative ? -1 : 1);
+
+			return new Fraction(left.Numerator * right.Denominator, left.Denominator * right.Numerator, sign < 0);
 		} 
 		#endregion
 
-		#region Conversions
+		#region Conversions To (explisit)
 		public bool ToBoolean(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
-		}
-
-		public byte ToByte(IFormatProvider provider)
-		{
-			throw new NotImplementedException();
+			throw new InvalidCastException();
 		}
 
 		public char ToChar(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			throw new InvalidCastException();
 		}
 
 		public DateTime ToDateTime(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			throw new InvalidCastException();
 		}
 
 		public decimal ToDecimal(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			decimal value = Convert.ToDecimal(Numerator);
+			value = Decimal.Divide(value, Convert.ToDecimal(Denominator));
+			value = Decimal.Multiply(value, (IsNegative ? -1.0M : 1.0M));
+
+			return value;
 		}
 
 		public double ToDouble(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToDouble(ToDecimal(provider));
 		}
 
 		public short ToInt16(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToInt16(ToDecimal(provider));
 		}
 
 		public int ToInt32(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToInt32(ToDecimal(provider));
 		}
 
 		public long ToInt64(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToInt64(ToDecimal(provider));
 		}
 
 		public sbyte ToSByte(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToSByte(ToDecimal(provider));
 		}
 
 		public float ToSingle(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToSingle(ToDecimal(provider));
 		}
 
 		public string ToString(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return ToString();
 		}
 
 		public object ToType(Type conversionType, IFormatProvider provider)
@@ -296,36 +446,110 @@ namespace FractionMath
 			throw new NotImplementedException();
 		}
 
+		public byte ToByte(IFormatProvider provider)
+		{
+			return Convert.ToByte(Math.Abs(ToDecimal(provider)));
+		}
+
 		public ushort ToUInt16(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToUInt16(Math.Abs(ToDecimal(provider)));
 		}
 
 		public uint ToUInt32(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToUInt32(Math.Abs(ToDecimal(provider)));
 		}
 
 		public ulong ToUInt64(IFormatProvider provider)
 		{
-			throw new NotImplementedException();
+			return Convert.ToUInt64(Math.Abs(ToDecimal(provider)));
 		}
-
-		public string Format(string format, object arg, IFormatProvider formatProvider)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string ToString(string format, IFormatProvider formatProvider)
-		{
-			throw new NotImplementedException();
-		}
-		#endregion
 
 		public TypeCode GetTypeCode()
 		{
-			throw new NotImplementedException();
+			return TypeCode.Object;
 		}
+		
+		#endregion
+
+		#region Conversions To (implicit)
+
+		public static implicit operator Decimal(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToDecimal(null);
+		}
+
+		public static implicit operator double(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToDouble(null);
+		}
+
+		public static implicit operator float(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToSingle(null);
+		}
+
+		public static implicit operator byte(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToByte(null);
+		}
+
+		public static implicit operator sbyte(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToSByte(null);
+		}
+
+		public static implicit operator short(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToInt16(null);
+		}
+
+		public static implicit operator int(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToInt32(null);
+		}
+
+		public static implicit operator long(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToInt64(null);
+		}
+
+		public static implicit operator ushort(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToUInt16(null);
+		}
+
+		public static implicit operator uint(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToUInt32(null);
+		}
+
+		public static implicit operator ulong(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToUInt64(null);
+		}
+
+		public static implicit operator string(Fraction fraction)
+		{
+			if (fraction == null) throw new ArgumentNullException("fraction");
+			return fraction.ToString(null);
+		}
+
+		#endregion
+
+
 
 	}
 }
