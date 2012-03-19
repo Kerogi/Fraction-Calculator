@@ -14,6 +14,31 @@ namespace Fraction_Calculator
         public Form1()
         {
             InitializeComponent();
-        }
+        }git add
+
+		private void btnPlus_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btnMinus_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btnMuliply_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btnDivide_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btnSolve_Click(object sender, EventArgs e)
+		{
+
+		}
     }
 }
