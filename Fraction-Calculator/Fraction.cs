@@ -220,6 +220,8 @@ namespace FractionMath
 
 		public static Fraction Parse(string stringValue)
 		{
+			if (stringValue == null) throw new ArgumentNullException("stringValue");
+			if (stringValue.Length == 0) throw new ArgumentException("String value is empty");
 			if (stringValue.IndexOfAny(Fraction.Vinculums) != -1)
 			{
 				string[] fractionSubparts = stringValue.Split(Fraction.Vinculums);
@@ -284,7 +286,7 @@ namespace FractionMath
 
 		public bool Equals(Fraction other)
 		{
-			if ((Object)other == null) return false;
+			if (other == null) return false;
 			if (IsNegative != other.IsNegative) return false;
 			if (Numerator == other.Numerator && Denominator == other.Denominator) return true;
 			ulong lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
@@ -293,6 +295,15 @@ namespace FractionMath
 
 		public static bool operator ==(Fraction a, Fraction b)
 		{
+			if (System.Object.ReferenceEquals(a, b))
+			{
+				return true;
+			}
+			
+			if (((object)a == null) || ((object)b == null))
+			{
+				return false;
+			}
 			return a.Equals(b);
 		}
 
