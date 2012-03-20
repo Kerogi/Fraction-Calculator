@@ -103,6 +103,12 @@ namespace FractionMath
 
 		public Fraction(decimal number)
 		{
+			if (Utils.GetSignificantDigitCount(number) >= Utils.GetSignificantDigitCount(Convert.ToDecimal(UInt64.MaxValue)))
+			{
+				string desc = String.Format("value \'{0}\' cannot be precisely converted to fraction.", number);
+				throw new ArgumentException(desc);
+			}
+
 			int numberOfZeroes = Utils.GetFractionalDigits(number);
 			decimal den = 1;
 			for (int i = 0; i < numberOfZeroes; i++)
@@ -110,14 +116,8 @@ namespace FractionMath
 				den = Decimal.Multiply(den, 10M);
 			}
 			decimal num = Decimal.Multiply(number, den);
-			if (Math.Abs(num) >= Convert.ToDecimal(UInt64.MaxValue))
-			{
-				string desc = String.Format("value \'{0}\' cannot be precisely converted to fraction.", number);
-				throw new ArgumentException(desc);
-			}
 
 			Debug.Assert(Decimal.Subtract(num, Decimal.Truncate(num)) == 0);
-			
 
 			Numerator = Convert.ToUInt64(Math.Abs(num));
 			Denominator = Convert.ToUInt64(Math.Abs(den));
@@ -266,10 +266,6 @@ namespace FractionMath
 		{
 			return String.Format("{0}{1}/{2}", IsNegative ? "-" : "", Numerator, Denominator);
 		}
-
-		//TODO: write constructors/converters from/to float, double, Dermical, int, string representation
-		//TODO: write basic operators: +, -, /, *
-		//TODO: implement IFormattable interface
 
 		#region Equality operations
 		public override int GetHashCode()

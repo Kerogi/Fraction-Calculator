@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FractionMath;
 
 namespace Fraction_Calculator.Test
 {
@@ -59,7 +60,7 @@ namespace Fraction_Calculator.Test
 			//Act
 			var actual_for_0 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_0);
 			var actual_for_1 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_1);
-            var actual_for_2 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_2);
+			var actual_for_2 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_2);
 			var actual_for_3 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_3);
 			var actual_for_4 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_4);
 			var actual_for_5 = FractionMath.Utils.GetFractionalDigits(digitsAfterDot_5);
@@ -77,7 +78,7 @@ namespace Fraction_Calculator.Test
 		public void GetFractionalDigitsForDecimalTest()
 		{
 			//Arrange
-            decimal digitsAfterDot_0 = 55234M;
+			decimal digitsAfterDot_0 = 55234M;
 			decimal digitsAfterDot_1 = 32425345.6M;
 			decimal digitsAfterDot_2 = 2920001237378123182371.24M;
 			decimal digitsAfterDot_3 = 801.234M;
@@ -100,6 +101,25 @@ namespace Fraction_Calculator.Test
 			Assert.AreEqual(3, actual_for_3);
 			Assert.AreEqual(4, actual_for_4);
 			Assert.AreEqual(5, actual_for_5);
+		}
+
+
+		[TestMethod()]
+		public void GetSignificantDigitCountTest()
+		{		
+			Assert.AreEqual(1, Utils.GetSignificantDigitCount(0M));
+			Assert.AreEqual(4, Utils.GetSignificantDigitCount(0.000M));
+			Assert.AreEqual(3, Utils.GetSignificantDigitCount(1.23M));
+			Assert.AreEqual(5, Utils.GetSignificantDigitCount(12.324M));
+			Assert.AreEqual(5, Utils.GetSignificantDigitCount(1.2300M));
+			Assert.AreEqual(1, Utils.GetSignificantDigitCount(-5M));
+			Assert.AreEqual(3, Utils.GetSignificantDigitCount(-5.01M));
+			Assert.AreEqual(4, Utils.GetSignificantDigitCount(-0.012M));
+			Assert.AreEqual(4, Utils.GetSignificantDigitCount(-0.100M));
+			Assert.AreEqual(2, Utils.GetSignificantDigitCount(0.0M));
+			Assert.AreEqual(7, Utils.GetSignificantDigitCount(10443.31M));
+			Assert.AreEqual(6, Utils.GetSignificantDigitCount(-130.340M));
+			Assert.AreEqual(6, Utils.GetSignificantDigitCount(-80.8000M));
 		}
 	}
 }
