@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace FractionMath
 {
 	//TODO: Move format logic to Format or to ToString
-	[DebuggerDisplay("{ToString(),nq} ({(double)Numerator/Denominator})")]
+	[DebuggerDisplay("{ToString(),nq} ({ToDecimal(null)})")]
 	public class Fraction: IComparable<Fraction>, IEquatable<Fraction>, ICloneable, IConvertible
 	{
 		#region Private fields
@@ -210,10 +210,13 @@ namespace FractionMath
 			Denominator /= divisor;
 		}
 
-		static public Fraction Reduce(Fraction fraction)
+		static public Fraction Reduce(Fraction fraction, bool clone = false)
 		{
 			if(fraction == null) throw new ArgumentNullException("fraction");
-			var fractionReduced = fraction.Clone() as Fraction;
+			var fractionReduced = fraction;
+			if(clone)
+				fractionReduced = (fraction.Clone() as Fraction);
+
 			fractionReduced.Reduce();
 			return fractionReduced;
 		}
@@ -222,22 +225,15 @@ namespace FractionMath
 		{
 			if (stringValue == null) throw new ArgumentNullException("stringValue");
 			if (stringValue.Length == 0) throw new ArgumentException("String value is empty");
-			if (stringValue.IndexOfAny(Fraction.Vinculums) != -1)
+			string[] fractionSubparts = stringValue.Split(Fraction.Vinculums);
+			if (fractionSubparts.Length>=2)
 			{
-				string[] fractionSubparts = stringValue.Split(Fraction.Vinculums);
-				if(fractionSubparts.Length>=2)
+				long numerator, denominator;
+				if (long.TryParse(fractionSubparts[0], out numerator) && long.TryParse(fractionSubparts[1], out denominator))
 				{
-					long numerator, denominator;
-					if (long.TryParse(fractionSubparts[0], out numerator) && long.TryParse(fractionSubparts[1], out denominator))
-					{
-						return new Fraction(numerator, denominator);
-					}
-					else
-					{
-						throw new FormatException(String.Format("Cannot parse \'{0}\' value", stringValue));
-					}
+					return new Fraction(numerator, denominator);
 				}
-				else 
+				else
 				{
 					throw new FormatException(String.Format("Cannot parse \'{0}\' value", stringValue));
 				}
@@ -283,65 +279,62 @@ namespace FractionMath
 		public bool Equals(Fraction other)
 		{
 			if (other == null) return false;
-			if (IsNegative != other.IsNegative) return false;
-			if (Numerator == other.Numerator && Denominator == other.Denominator) return true;
-			ulong lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
-			return (Numerator * (lcm / Denominator)) == (other.Numerator * (lcm / other.Denominator));
+			return CompareTo(other) == 0;
 		}
 
-		public static bool operator ==(Fraction a, Fraction b)
+		public static bool operator ==(Fraction left, Fraction right)
 		{
-			if (System.Object.ReferenceEquals(a, b))
+			if (System.Object.ReferenceEquals(left, right))
 			{
 				return true;
 			}
 			
-			if (((object)a == null) || ((object)b == null))
+			if (((object)left == null) || ((object)right == null))
 			{
 				return false;
 			}
-			return a.Equals(b);
+			return left.Equals(right);
 		}
 
-		public static bool operator !=(Fraction a, Fraction b)
+		public static bool operator !=(Fraction left, Fraction right)
 		{
-			return !(a == b);
+			return !(left == right);
 		}
 		#endregion	
 		
 		#region Comparison operations
 		public int CompareTo(Fraction other)
 		{
-			if (Numerator == other.Numerator && Denominator == other.Denominator && IsNegative == other.IsNegative)
+			if ((object)other == null) throw new ArgumentNullException("other");
+			if (IsNegative == other.IsNegative && Numerator == other.Numerator && Denominator == other.Denominator)
 			{
 				return 0;
 			}
 			else
 			{
-				double valueThis = Numerator / (double)Denominator * (IsNegative ? -1 : 1);
-				double valueOther = other.Numerator / (double)other.Denominator * (other.IsNegative ? -1 : 1);
-				if (valueThis > valueOther)
-					return 1;
-				else
-					return -1;
+				ulong lcm = Utils.LeastCommonMultiple(Denominator, other.Denominator);
+				var selfNumerator = Numerator * ((decimal)lcm / Denominator) * (IsNegative ? -1 : 1);
+				var otherNumerator = other.Numerator * ((decimal)lcm / other.Denominator) * (other.IsNegative ? -1 : 1);
+
+				return selfNumerator.CompareTo(otherNumerator);
 			}
 		}
 
-		public static bool operator >(Fraction a, Fraction b)
+		public static bool operator >(Fraction left, Fraction right)
 		{
-			return a.CompareTo(b) > 0;
+			return left.CompareTo(right) > 0;
 		}
 
-		public static bool operator <(Fraction a, Fraction b)
+		public static bool operator <(Fraction left, Fraction right)
 		{
-			return a.CompareTo(b) < 0;
+			return left.CompareTo(right) < 0;
 		} 
 		#endregion
 		
 		#region Mathematical operations
 		public static Fraction operator -(Fraction fractiontoNegate)
 		{
-			if (fractiontoNegate == null) throw new ArgumentNullException("fraction");
+			if ((object)fractiontoNegate == null) throw new ArgumentNullException("fraction");
 			Fraction negativeFraction = fractiontoNegate.Clone() as Fraction;
 			negativeFraction.IsNegative = !negativeFraction.IsNegative;
 			return negativeFraction;
@@ -349,8 +342,7 @@ namespace FractionMath
 
 		public static Fraction operator +(Fraction left, Fraction right)
 		{
-			if (left == null) throw new ArgumentNullException("left");
-			if (right == null) throw new ArgumentNullException("right");
+			if ((object)left == null || (object)right == null) throw new ArgumentNullException("left or right");
 
 			decimal lcm = Convert.ToDecimal(Utils.LeastCommonMultiple(left.Denominator, right.Denominator));
 			decimal leftNumerator = Convert.ToDecimal(left.Numerator * (lcm / left.Denominator)) * (left.IsNegative ? -1 : 1);
@@ -361,16 +353,14 @@ namespace FractionMath
 
 		public static Fraction operator -(Fraction left, Fraction right)
 		{
-			if (left == null) throw new ArgumentNullException("left");
-			if (right == null) throw new ArgumentNullException("right");
+			if ((object)left == null || (object)right == null) throw new ArgumentNullException("left or right");
 
 			return (left + (-right));
 		}
 
 		public static Fraction operator *(Fraction left, Fraction right)
 		{
-			if (left == null) throw new ArgumentNullException("left");
-			if (right == null) throw new ArgumentNullException("right");
+			if ((object)left == null || (object)right == null) throw new ArgumentNullException("left or right");
 
 			int sign = (left.IsNegative ? -1 : 1) * (right.IsNegative ? -1 : 1);
 
@@ -379,8 +369,7 @@ namespace FractionMath
 
 		public static Fraction operator /(Fraction left, Fraction right)
 		{
-			if (left == null) throw new ArgumentNullException("left");
-			if (right == null) throw new ArgumentNullException("right");
+			if ((object)left == null || (object)right == null) throw new ArgumentNullException("left or right");
 
 			int sign = (left.IsNegative ? -1 : 1) * (right.IsNegative ? -1 : 1);
 
