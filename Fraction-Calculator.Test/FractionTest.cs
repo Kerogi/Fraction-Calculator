@@ -1,14 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Fraction_Calculator;
-using FractionMath;
-using System;
-using Moq;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using FractionMath;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Fraction_Calculator.Test
 {
-	[TestClass, System.Runtime.InteropServices.GuidAttribute("0C01B76B-31C4-4E21-82EA-46A888D21AB0")]
+	[TestClass]
 	public class FractionTest
 	{
 		public static Random rand = new Random();
@@ -17,18 +15,20 @@ namespace Fraction_Calculator.Test
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void DenominatorPropertyExceptionsTest()
 		{
-			Fraction frac = 0.123;
+			Fraction frac = new Fraction(1, 123);
 			frac.Denominator *= 0;
 		}
+
+		#region Constructors explicit tests
 
 		[TestMethod()]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void BaseConstructorExceptionsTest()
 		{
 			//Arrange
-			ulong numerator = 1; 
-			ulong denominator = 0; 
-			bool isNegative = false; 
+			ulong numerator = 1;
+			ulong denominator = 0;
+			bool isNegative = false;
 
 			//Act
 			Fraction target = new Fraction(numerator, denominator, isNegative);
@@ -69,7 +69,6 @@ namespace Fraction_Calculator.Test
 			//Arrange
 			long numerator = -1;
 			long denominatior = 2;
-			
 
 			//Act
 			var fract = new Fraction(numerator, denominatior);
@@ -80,200 +79,12 @@ namespace Fraction_Calculator.Test
 			Assert.AreEqual<bool>(true, fract.IsNegative);
 		}
 
-		#region Integral type construction tests (signed)
-
-		[TestMethod]
-		public void ConstructionSByteTest()
-		{
-			//Arrange
-			sbyte number = Convert.ToSByte(rand.Next(sbyte.MinValue, sbyte.MaxValue));
-			Fraction expected = new Fraction(Convert.ToUInt64(Math.Abs(number)), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionShortTest()
-		{
-			//Arrange
-			short number = Convert.ToInt16(rand.Next(short.MinValue, short.MaxValue));
-			Fraction expected = new Fraction(Convert.ToUInt64(Math.Abs(number)), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionIntTest()
-		{
-			//Arrange
-			int number = Convert.ToInt32(rand.Next());
-			Fraction expected = new Fraction(Convert.ToUInt64(Math.Abs(number)), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionLongTest()
-		{
-			//Arrange
-			long number = Convert.ToInt64(rand.Next());
-			Fraction expected = new Fraction(Convert.ToUInt64(Math.Abs(number)), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		#endregion		
-
-		#region Integral type construction tests (unsigned)
-
-		[TestMethod]
-		public void ConstructionByteTest()
-		{
-			//Arrange
-			byte number = Convert.ToByte(Math.Abs(rand.Next(byte.MinValue,byte.MaxValue)));
-			Fraction expected = new Fraction(Convert.ToUInt64(number), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionUShortTest()
-		{
-			//Arrange
-			ushort number = Convert.ToUInt16(Math.Abs(rand.Next(ushort.MinValue, ushort.MaxValue)));
-			Fraction expected = new Fraction(Convert.ToUInt64(number), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionUIntTest()
-		{
-			//Arrange
-			uint number = Convert.ToUInt32(Math.Abs(rand.Next()));
-			Fraction expected = new Fraction(Convert.ToUInt64(number), 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionULongTest()
-		{
-			//Arrange
-			ulong number = Convert.ToUInt64(Math.Abs(rand.Next()));
-			Fraction expected = new Fraction(number, 1, number < 0);
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		#endregion	
-
 		[TestMethod]
 		public void ConstructionDecimalTest()
 		{
 			//Arrange
 			Decimal number = new Decimal(-5.649);
 			Fraction expected = new Fraction(5649, 1000, true);
-
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionDoubleTest()
-		{
-			//Arrange
-			double number = 1565.25168;
-			Fraction expected = new Fraction(156525168, 100000);
-
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionFloatTest()
-		{
-			//Arrange
-			float number = 11.2394f;
-			Fraction expected = new Fraction(112394, 10000);
-
-
-			//Act
-			var actual = new Fraction(number);
-
-			//Assert
-			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
-			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
-			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
-		}
-
-		[TestMethod]
-		public void ConstructionZeroTest()
-		{
-			//Arrange
-			float number = 0;
-			Fraction expected = new Fraction(0, 1);
-
 
 			//Act
 			var actual = new Fraction(number);
@@ -295,23 +106,195 @@ namespace Fraction_Calculator.Test
 			Fraction frac = new Fraction(veryLongNumber);
 		}
 
-
 		[TestMethod]
-		public void ConstructionSimpleStringTest()
+		public void ConstructionZeroTest()
 		{
 			//Arrange
-			String str = "-1.5";
-			Fraction expected = new Fraction(3, 2, true);
-
+			float number = 0;
+			Fraction expected = new Fraction(0, 1);
 
 			//Act
-			var actual = new Fraction(str);
+			var actual = new Fraction(number);
 
 			//Assert
 			Assert.AreEqual<ulong>(expected.Numerator, actual.Numerator);
 			Assert.AreEqual<ulong>(expected.Denominator, actual.Denominator);
 			Assert.AreEqual<bool>(expected.IsNegative, actual.IsNegative);
 		}
+
+		#endregion Constructors explicit tests
+
+		#region Constructors implicit tests
+
+		[TestMethod()]
+		public void ConstructFractionFromDecimal()
+		{
+			//Arrange
+			decimal src = 0.5M;
+			Fraction expected = new Fraction(1, 2);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromDouble()
+		{
+			//Arrange
+			double src = -0.33;
+			Fraction expected = new Fraction(33, 100, true);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromFloat()
+		{
+			//Arrange
+			float src = 0.25f;
+			Fraction expected = new Fraction(1, 4);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromByte()
+		{
+			//Arrange
+			byte src = 1;
+			Fraction expected = new Fraction(1, 1);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromSByte()
+		{
+			//Arrange
+			sbyte src = -6;
+			Fraction expected = new Fraction(6, 1, true);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromShort()
+		{
+			//Arrange
+			short src = 9;
+			Fraction expected = new Fraction(9, 1);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromInt()
+		{
+			//Arrange
+			int src = -12;
+			Fraction expected = new Fraction(-24, 2);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromLong()
+		{
+			//Arrange
+			long src = -5;
+			Fraction expected = new Fraction(5, 1, true);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromUnsignedShort()
+		{
+			//Arrange
+			ushort src = 5;
+			Fraction expected = new Fraction(50, 10);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromUnsignedLong()
+		{
+			//Arrange
+			ulong src = 123;
+			Fraction expected = new Fraction(123, 1);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromUnsignedInt()
+		{
+			//Arrange
+			uint src = 50;
+			Fraction expected = new Fraction(100, 2);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod()]
+		public void ConstructFractionFromString()
+		{
+			//Arrange
+			string src = "0.126";
+			Fraction expected = new Fraction(126, 1000);
+
+			//Act
+			Fraction actual = src;
+
+			//Assert
+			Assert.AreEqual(expected, actual);
+		}
+
+		#endregion Constructors implicit tests
 
 		#region String parsing tests
 
@@ -408,7 +391,6 @@ namespace Fraction_Calculator.Test
 			Fraction actual = Fraction.Parse(teststring);
 		}
 
-
 		[TestMethod]
 		[ExpectedException(typeof(FormatException))]
 		public void BrokenFractionStringParsingTestNumeratorIsInvalid()
@@ -430,17 +412,19 @@ namespace Fraction_Calculator.Test
 			//Act
 			Fraction actual = Fraction.Parse(teststring);
 		}
-		#endregion
+
+		#endregion String parsing tests
 
 		#region Reduce test
+
 		[TestMethod]
 		public void ReduceFractionTest()
 		{
-			//Arrange 
+			//Arrange
 			Fraction actualFraction = new Fraction(36, 63);
 			Fraction expectedFraction = new Fraction(4, 7);
 
-			//Act 
+			//Act
 			actualFraction.Reduce();
 
 			//Assert
@@ -453,21 +437,21 @@ namespace Fraction_Calculator.Test
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void StaticReduceExceptionTest()
 		{
-			//Arrange 
+			//Arrange
 			Fraction bigFraction = null;
 
-			//Act 
+			//Act
 			Fraction.Reduce(bigFraction);
 		}
 
 		[TestMethod]
 		public void StaticReduceAndCopyFractionTest()
 		{
-			//Arrange 
+			//Arrange
 			Fraction bigFraction = new Fraction(36, 63);
 			Fraction expectedSmallFraction = new Fraction(4, 7);
 
-			//Act 
+			//Act
 			var actualReducedFraction = Fraction.Reduce(bigFraction, true);
 
 			//Assert
@@ -480,11 +464,11 @@ namespace Fraction_Calculator.Test
 		[TestMethod]
 		public void StaticReduceNotCopyFractionTest()
 		{
-			//Arrange 
+			//Arrange
 			Fraction bigFraction = new Fraction(36, 63);
 			Fraction expectedSmallFraction = new Fraction(4, 7);
 
-			//Act 
+			//Act
 			var actualReducedFraction = Fraction.Reduce(bigFraction);
 
 			//Assert
@@ -492,8 +476,9 @@ namespace Fraction_Calculator.Test
 			Assert.AreEqual(expectedSmallFraction.Numerator, actualReducedFraction.Numerator);
 			Assert.AreEqual(expectedSmallFraction.Denominator, actualReducedFraction.Denominator);
 			Assert.AreEqual(expectedSmallFraction.IsNegative, actualReducedFraction.IsNegative);
-		} 
-		#endregion
+		}
+
+		#endregion Reduce test
 
 		[TestMethod]
 		public void CloneFractionTest()
@@ -504,30 +489,28 @@ namespace Fraction_Calculator.Test
 			Fraction srcFraction = new Fraction(numerator, denominatior);
 			Fraction expectedFraction = new Fraction(numerator, denominatior);
 
-			//Act 
+			//Act
 			Fraction dstFraction = srcFraction.Clone() as Fraction;
 
 			//Assert
 			Assert.AreEqual(expectedFraction.Numerator, dstFraction.Numerator);
 			Assert.AreEqual(expectedFraction.Denominator, dstFraction.Denominator);
 			Assert.AreEqual(expectedFraction.IsNegative, dstFraction.IsNegative);
-		} 
-		
+		}
 
-
-		
 		#region Equality and Order relatios tests
+
 		[TestMethod()]
 		public void GetHashCodeTest()
 		{
 			//Arrange
 			var frac1 = new Fraction(0.5);
-			var frac2 = new Fraction(1,2);
+			var frac2 = new Fraction(1, 2);
 			var frac3 = Fraction.Parse("-1/2");
 
 			//Act
 			Fraction frac2_alt = (Fraction)frac2.Clone();
-			frac2_alt.Numerator +=1;
+			frac2_alt.Numerator += 1;
 
 			//Assert
 			Assert.AreEqual(frac1.GetHashCode(), frac2.GetHashCode());
@@ -535,14 +518,13 @@ namespace Fraction_Calculator.Test
 			Assert.AreNotEqual(frac2.GetHashCode(), frac2_alt.GetHashCode());
 		}
 
-
 		[TestMethod]
 		public void EqualsTest()
 		{
 			//Arrange
 			Fraction x = new Fraction(6, 8);
 			Fraction y = new Fraction(3, 4);
-			Fraction z = new Fraction(1,1);
+			Fraction z = new Fraction(1, 1);
 			z.Numerator = 12;
 			z.Denominator = 16;
 			Fraction a = new Fraction(-12, 16);
@@ -576,7 +558,7 @@ namespace Fraction_Calculator.Test
 			Fraction z = new Fraction(12, 16);
 			Fraction a = new Fraction(11, 16);
 
-			var dec = 3M / 4M; ;
+			object dec = 3M / 4M; ;
 
 			Fraction k = null;
 			Fraction l = null;
@@ -585,7 +567,7 @@ namespace Fraction_Calculator.Test
 			Assert.IsTrue(x == x); //Рефлексивность
 			Assert.AreEqual(x == y, y == x); //Симметричность
 			Assert.AreEqual(y == z, x == z); //Транзитивность
-			
+
 			Assert.IsTrue(k == null);
 			Assert.IsTrue(l == null);
 			Assert.IsTrue(null == k);
@@ -609,7 +591,6 @@ namespace Fraction_Calculator.Test
 			Fraction b = new Fraction(1, 2);
 			Fraction c = new Fraction(2, 5);
 
-
 			//Assert
 			Assert.IsTrue(a > b);
 			Assert.IsFalse(a < a); //Антирефлексивность
@@ -631,8 +612,8 @@ namespace Fraction_Calculator.Test
 		{
 			//Arrange
 			Fraction a = new Fraction(2, 5);
-			Fraction a_str = "2|5";
-			Fraction b = 0.5;
+			Fraction a_str = new Fraction(20, 50);
+			Fraction b = new Fraction(1, 2);
 			Fraction c = b.Clone() as Fraction;
 			c.Numerator *= 2;
 			c.Denominator *= 2;
@@ -645,11 +626,10 @@ namespace Fraction_Calculator.Test
 			var result4 = a.CompareTo(a_str);
 
 			//Assert
-			Assert.AreEqual(1, result1); 
+			Assert.AreEqual(1, result1);
 			Assert.AreEqual(0, result2);
 			Assert.AreEqual(-1, result3);
 			Assert.AreEqual(0, result4);
-
 		}
 
 		[TestMethod]
@@ -676,8 +656,9 @@ namespace Fraction_Calculator.Test
 
 			//Assert
 			CollectionAssert.AreEqual(values, fractions, orderComparer.Object);
-		}		 
-		#endregion
+		}
+
+		#endregion Equality and Order relatios tests
 
 		#region Mathematical operators test (exeptions)
 
@@ -688,7 +669,7 @@ namespace Fraction_Calculator.Test
 			//Arrange
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = -b;
 		}
 
@@ -697,23 +678,25 @@ namespace Fraction_Calculator.Test
 		public void MathAdditionNullRightTest()
 		{
 			//Arrange
-			Fraction a = 1;
+			Fraction a = new Fraction(1, 1); ;
 			Fraction b = null;
 
-			//Act 
-			Fraction actual = a+b;
+			//Act
+			Fraction actual = a + b;
 		}
+
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MathAdditionNullLeftTest()
 		{
 			//Arrange
 			Fraction a = null;
-			Fraction b = 1;
+			Fraction b = new Fraction(1, 1);
 
-			//Act 
+			//Act
 			Fraction actual = a + b;
 		}
+
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MathAdditionNullBothTest()
@@ -722,20 +705,19 @@ namespace Fraction_Calculator.Test
 			Fraction a = null;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a + b;
 		}
-
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void MathSubstractionNullRightTest()
 		{
 			//Arrange
-			Fraction a = 1;
+			Fraction a = new Fraction(1, 1); ;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a - b;
 		}
 
@@ -745,9 +727,9 @@ namespace Fraction_Calculator.Test
 		{
 			//Arrange
 			Fraction a = null;
-			Fraction b = 1;
+			Fraction b = new Fraction(1, 1); ;
 
-			//Act 
+			//Act
 			Fraction actual = a - b;
 		}
 
@@ -759,7 +741,7 @@ namespace Fraction_Calculator.Test
 			Fraction a = null;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a - b;
 		}
 
@@ -768,10 +750,10 @@ namespace Fraction_Calculator.Test
 		public void MathMultiplicationNullRightTest()
 		{
 			//Arrange
-			Fraction a = 1;
+			Fraction a = new Fraction(1, 1); ;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a * b;
 		}
 
@@ -781,9 +763,9 @@ namespace Fraction_Calculator.Test
 		{
 			//Arrange
 			Fraction a = null;
-			Fraction b = 1;
+			Fraction b = new Fraction(1, 1); ;
 
-			//Act 
+			//Act
 			Fraction actual = a * b;
 		}
 
@@ -795,7 +777,7 @@ namespace Fraction_Calculator.Test
 			Fraction a = null;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a * b;
 		}
 
@@ -804,10 +786,10 @@ namespace Fraction_Calculator.Test
 		public void MathDivisionNullRightTest()
 		{
 			//Arrange
-			Fraction a = 1;
+			Fraction a = new Fraction(1, 1); ;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a / b;
 		}
 
@@ -817,9 +799,9 @@ namespace Fraction_Calculator.Test
 		{
 			//Arrange
 			Fraction a = null;
-			Fraction b = 1;
+			Fraction b = new Fraction(1, 1); ;
 
-			//Act 
+			//Act
 			Fraction actual = a / b;
 		}
 
@@ -831,10 +813,11 @@ namespace Fraction_Calculator.Test
 			Fraction a = null;
 			Fraction b = null;
 
-			//Act 
+			//Act
 			Fraction actual = a / b;
 		}
-		#endregion
+
+		#endregion Mathematical operators test (exeptions)
 
 		#region Mathematical operators test
 
@@ -845,7 +828,7 @@ namespace Fraction_Calculator.Test
 			Fraction a = new Fraction(1, 2);
 			Fraction expected = new Fraction(1, 2, true);
 
-			//Act 
+			//Act
 			Fraction actual = -a;
 
 			//Assert
@@ -860,7 +843,7 @@ namespace Fraction_Calculator.Test
 			Fraction b = new Fraction(1, 3);
 			Fraction expected = new Fraction(5, 6);
 
-			//Act 
+			//Act
 			Fraction actual = a + b;
 
 			//Assert
@@ -881,7 +864,7 @@ namespace Fraction_Calculator.Test
 			//Assert
 			Assert.AreEqual(expected, actual);
 		}
-		
+
 		[TestMethod]
 		public void OperatorMultiplyBothPositiveTest()
 		{
@@ -970,202 +953,22 @@ namespace Fraction_Calculator.Test
 
 			//Assert
 			Assert.AreEqual(expected, actual);
-		} 
-		#endregion
+		}
 
-		#region Convertions tests
+		#endregion Mathematical operators test
 
-		[TestMethod]
-		public void FloatConversationsTest()
+		[TestMethod()]
+		public void GetTypeCodeTest()
 		{
 			//Arrange
-			Fraction expected = new Fraction(2, 5);
+			Fraction target = new Fraction(1, 3);
+			TypeCode expected = TypeCode.Object;
 
 			//Act
-			float temp = expected;
-			Fraction actual = temp;
+			TypeCode actual = target.GetTypeCode();
 
 			//Assert
 			Assert.AreEqual(expected, actual);
 		}
-
-		[TestMethod]
-		public void DoubleConversationsTest()
-		{
-			//Arrange
-			Fraction expected = new Fraction(3, 8);
-
-			//Act
-			double temp = expected;
-			Fraction actual = temp;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void DecimalConversationsTest()
-		{
-			//Arrange
-			Fraction expected = new Fraction(3, 15);
-
-			//Act
-			decimal temp = expected;
-			Fraction actual = temp;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void ByteConversationsTest()
-		{
-			//Arrange
-			sbyte multiplier = -2;
-			var numerator = 5;
-			var denominator = 12;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void ShortConversationsTest()
-		{
-			//Arrange
-			short multiplier = -4;
-			var numerator = 1;
-			var denominator = 3;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void IntConversationsTest()
-		{
-			//Arrange
-			int multiplier = -3;
-			var numerator = 2;
-			var denominator = 7;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void LongConversationsTest()
-		{
-			//Arrange
-			long multiplier = -6;
-			var numerator = 8;
-			var denominator = 9;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void UnsignedByteConversationsTest()
-		{
-			//Arrange
-			byte multiplier = 7;
-			var numerator = 1;
-			var denominator = 25;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void UnsignedShortConversationsTest()
-		{
-			//Arrange
-			ushort multiplier = 9;
-			var numerator = 10;
-			var denominator = 55;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void UnsignedIntConversationsTest()
-		{
-			//Arrange
-			uint multiplier = 2;
-			var numerator = 9;
-			var denominator = 2;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * multiplier, denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void UnsignedLongConversationsTest()
-		{
-			//Arrange
-			ulong multiplier = 2;
-			var numerator = 6;
-			var denominator = 1221;
-			Fraction a = new Fraction(numerator, denominator);
-			Fraction expected = new Fraction(numerator * Convert.ToInt32(multiplier), denominator);
-
-			//Act
-			Fraction actual = a * multiplier;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-		
-		[TestMethod]
-		public void StringConversationsTest()
-		{
-			//Arrange
-			Fraction expected = new Fraction(1, 32);
-
-			//Act
-			string temp = expected;
-			Fraction actual = temp;
-
-			//Assert
-			Assert.AreEqual(expected, actual);
-		}
-		#endregion
 	}
 }
