@@ -955,6 +955,18 @@ namespace Fraction_Calculator.Test
 			Assert.AreEqual(expected, actual);
 		}
 
+		[TestMethod]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void OperatorDivisionRightZeroTest()
+		{
+			//Arrange
+			Fraction a = new Fraction(1, 2);
+			Fraction b = new Fraction(0, 1234567890);
+
+			//Act
+			Fraction actual = a / b;
+		}
+
 		#endregion Mathematical operators test
 
 		[TestMethod()]

@@ -59,7 +59,7 @@ namespace FractionMath
 		{
 			if (denominator == 0)
 			{
-				throw new ArgumentOutOfRangeException("denominator", denominator, "Value must be greater than 0");
+				throw new ArgumentOutOfRangeException("denominator", denominator, "Denominator value must be greater than 0");
 			}
 			_numerator = numerator;
 			_denominator = denominator;
@@ -269,6 +269,8 @@ namespace FractionMath
 		public static Fraction operator /(Fraction left, Fraction right)
 		{
 			if ((object)left == null || (object)right == null) throw new ArgumentNullException("left or right");
+			if(right.Numerator == 0)
+				throw new DivideByZeroException("'right' operand is zero");
 
 			int sign = (left.IsNegative ? -1 : 1) * (right.IsNegative ? -1 : 1);
 

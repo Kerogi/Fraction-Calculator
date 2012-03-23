@@ -14,11 +14,16 @@ namespace Fraction_Calculator
 		[STAThread]
 		static void Main()
 		{
-			var a = new Fraction(1, 2);
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form1());
+
+			var view = new FractionCalculatorView();
+			var model = new FractionCalculatorModel();
+			var formatFabric = new FractionConverterConstructor();
+
+			var controller = new FractionCalculatorController(model, view, formatFabric);
+
+			Application.Run(view);
 		}
 	}
 }

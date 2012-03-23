@@ -13,3 +13,4 @@ bin
 _ReSharper.*
 *.resharper
 TestResults
+*.sdf

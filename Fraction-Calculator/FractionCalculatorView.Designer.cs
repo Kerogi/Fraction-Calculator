@@ -1,6 +1,6 @@
 ﻿namespace Fraction_Calculator
 {
-    partial class Form1
+    partial class FractionCalculatorView
     {
         /// <summary>
         /// Required designer variable.
@@ -37,9 +37,9 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -156,6 +156,22 @@
 			this.label1.TabIndex = 4;
 			this.label1.Text = "=";
 			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Location = new System.Drawing.Point(12, 164);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(147, 17);
+			this.checkBox1.TabIndex = 6;
+			this.checkBox1.Text = "Convert result to decimals";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(299, 17);
+			this.toolStripStatusLabel1.Text = "Enter values in field and then click on operation button.";
+			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -167,23 +183,7 @@
 			this.statusStrip1.TabIndex = 5;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
-			// toolStripStatusLabel1
-			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(299, 17);
-			this.toolStripStatusLabel1.Text = "Enter values in field and then click on operation button.";
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(12, 164);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(147, 17);
-			this.checkBox1.TabIndex = 6;
-			this.checkBox1.Text = "Convert result to decimals";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// Form1
+			// FractionCalculatorView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -198,7 +198,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "Form1";
+			this.Name = "FractionCalculatorView";
 			this.Text = "Fraction-Calculator";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.statusStrip1.ResumeLayout(false);
@@ -219,9 +219,9 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TextBox textBox3;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.StatusStrip statusStrip1;
 
 	}
 }

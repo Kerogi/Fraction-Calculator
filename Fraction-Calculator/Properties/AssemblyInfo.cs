@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Fraction-Calculator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Simple Fraction Calculator (Eduacation Project)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Fraction-Calculator")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyCopyright("Igor Kostenko©  2012 (CC BY)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
