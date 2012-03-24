@@ -9,7 +9,7 @@ Change log:
 
 + found a bug
 
-+ Added [todo list](TODO.markdown)
++ Added [todo list](Fraction-Calculator/TODO.markdown)
 
 Task description
 ----------------
