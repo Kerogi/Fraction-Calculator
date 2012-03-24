@@ -9,7 +9,7 @@ Change log:
 
 + found a bug
 
-+ Added [todo list](Fraction-Calculator/TODO.markdown)
++ Added [todo list](https://github.com/Kerogi/Fraction-Calculator/blob/master/TODO.markdown)
 
 Task description
 ----------------
