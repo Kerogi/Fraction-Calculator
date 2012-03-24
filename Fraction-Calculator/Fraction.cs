@@ -53,7 +53,7 @@ namespace FractionMath
 
 		#endregion Properties
 
-		#region Constructors (explicit an significant)
+		#region Constructors (explicit and significant)
 
 		public Fraction(ulong numerator, ulong denominator, bool isNegative = false)
 		{

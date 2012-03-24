@@ -3,6 +3,14 @@
 
 Simple fraction calculator that I should write on C# for my education. 
 
+Change log:
+
+25-03-2012:
+
++ found a bug
+
++ Added [todo list](TODO.markdown)
+
 Task description
 ----------------
 
